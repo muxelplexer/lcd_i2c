@@ -93,3 +93,12 @@ int lcd_print(struct lcd* lcd, const char* text, const size_t text_len, uint8_t 
  ** @param lcd - the structure to initialize
  **/
 int lcd_clear(lcd_t* lcd);
+
+/**
+ ** @brief turns the backlight on or off
+ **        this will only set the internal flag for the backlight level
+ **        and will only take effect on the next write
+ ** @param lcd - the structure to initialize
+ ** @param bl_level - set to LCD_BL_OFF or LCD_BL_ON.
+ **/
+int lcd_set_backlight(lcd_t* lcd, const lcd_bl_t bl_level);

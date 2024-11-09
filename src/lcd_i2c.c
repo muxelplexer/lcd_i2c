@@ -129,6 +129,12 @@ int lcd_clear(lcd_t* lcd)
     return 0;
 }
 
+int lcd_set_backlight(lcd_t* lcd, const lcd_bl_t bl_level)
+{
+    lcd->backlight = bl_level;
+    return 0;
+}
+
 static int lcd_set_line(lcd_t* lcd, uint8_t line)
 {
     switch(line)
