@@ -122,6 +122,15 @@ int lcd_print(lcd_t* lcd, const char* text, const size_t text_len, uint8_t line)
     return 0;
 }
 
+int lcd_put_char(lcd_t* lcd, const char ch, uint8_t line)
+{
+    if (line != 0xFF)
+        lcd_set_line(lcd, line);
+    int ret = lcd_write(lcd, (uint8_t)ch, LCD_RS);
+    lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 75000);
+    return ret;
+}
+
 int lcd_clear(lcd_t* lcd)
 {
     lcd_write(lcd, LCD_CMD_CLS, 0);
