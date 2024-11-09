@@ -50,6 +50,8 @@
 
 static int lcd_write4b(lcd_t* lcd, uint8_t val);
 static int lcd_strobe(lcd_t* lcd, const uint8_t val);
+static int lcd_set_line(lcd_t* lcd, uint8_t line);
+static int lcd_clear_line(lcd_t* lcd, const uint8_t line);
 
 int lcd_init(lcd_t* lcd, const uint8_t addr, const uint8_t cols, const uint8_t rows)
 {
@@ -77,40 +79,6 @@ int lcd_write(lcd_t* lcd, uint8_t val, const uint8_t mode)
 {
     lcd_write4b(lcd, mode | (val & 0xF0));
     lcd_write4b(lcd, mode | ((val << 4) & 0xF0));
-    return 0;
-}
-
-int lcd_set_line(lcd_t* lcd, uint8_t line)
-{
-    switch(line)
-    {
-    case 0:
-        lcd_write(lcd, 0x80, 0);
-        break;
-    case 1:
-        lcd_write(lcd, 0xC0, 0);
-        break;
-    case 2:
-        lcd_write(lcd, 0x94, 0);
-        break;
-    case 3:
-        lcd_write(lcd, 0xD4, 0);
-        break;
-    default:
-        return -1;
-    }
-    return 0;
-}
-
-static int lcd_clear_line(lcd_t* lcd, const uint8_t line)
-{
-    static const unsigned char empty[] = {0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE, 0x00};
-    lcd_set_line(lcd, line);
-    for (int i = 0; i < lcd->cols; ++i)
-    {
-        lcd_write(lcd, empty[i], 0);
-        lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 1000);
-    }
     return 0;
 }
 
@@ -158,6 +126,40 @@ int lcd_clear(lcd_t* lcd)
 {
     lcd_write(lcd, LCD_CMD_CLS, 0);
     lcd_write(lcd, LCD_CMD_RET, 0);
+    return 0;
+}
+
+static int lcd_set_line(lcd_t* lcd, uint8_t line)
+{
+    switch(line)
+    {
+    case 0:
+        lcd_write(lcd, 0x80, 0);
+        break;
+    case 1:
+        lcd_write(lcd, 0xC0, 0);
+        break;
+    case 2:
+        lcd_write(lcd, 0x94, 0);
+        break;
+    case 3:
+        lcd_write(lcd, 0xD4, 0);
+        break;
+    default:
+        return -1;
+    }
+    return 0;
+}
+
+static int lcd_clear_line(lcd_t* lcd, const uint8_t line)
+{
+    static const unsigned char empty[] = {0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE,0xFE, 0xFE, 0x00};
+    lcd_set_line(lcd, line);
+    for (int i = 0; i < lcd->cols; ++i)
+    {
+        lcd_write(lcd, empty[i], 0);
+        lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 1000);
+    }
     return 0;
 }
 
