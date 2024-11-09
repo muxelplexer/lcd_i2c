@@ -20,6 +20,14 @@ struct lcd_i2c
 };
 ```
 
+## Known Issues
+
+- Not compatible with non 2-line mode.
+- Likely incompatible with 16x2 interfaces.
+- Unable to upload custom character graphs.
+- Timing is not adjusted to datasheet yet.
+- Unable to adjust writing speed or other LCD settings.
+
 ## License
 
 See `LICENSE` for information about licensing.
