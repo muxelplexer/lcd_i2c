@@ -60,6 +60,7 @@ int lcd_init(lcd_t* lcd, const uint8_t addr, const uint8_t cols, const uint8_t r
     lcd->cols = cols;
     lcd->rows = rows;
     lcd->backlight = LCD_BL_ON;
+    lcd->write_delay = 75000;
 
     lcd_write(lcd, 0x3, 0x0);
     lcd_write(lcd, 0x3, 0x0);
@@ -117,7 +118,7 @@ int lcd_print(lcd_t* lcd, const char* text, const size_t text_len, uint8_t line)
         {
             ++text_pos;
         }
-        lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 75000);
+        lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, lcd->write_delay);
     }
     return 0;
 }
@@ -127,7 +128,7 @@ int lcd_put_char(lcd_t* lcd, const char ch, uint8_t line)
     if (line != 0xFF)
         lcd_set_line(lcd, line);
     int ret = lcd_write(lcd, (uint8_t)ch, LCD_RS);
-    lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 75000);
+    lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, lcd->write_delay);
     return ret;
 }
 

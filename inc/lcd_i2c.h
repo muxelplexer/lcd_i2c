@@ -52,6 +52,7 @@ typedef enum lcd_backlight : uint8_t
 
 /**
  ** @brief main structure storing all data needed by the lcd system.
+ ** @param write_delay - use to adjust the delay after each character that is being printed.
  **/
 typedef struct lcd
 {
@@ -60,6 +61,7 @@ typedef struct lcd
     uint8_t addr;
     uint8_t rows;
     uint8_t cols;
+    uint32_t write_delay;
 } lcd_t;
 
 /**
