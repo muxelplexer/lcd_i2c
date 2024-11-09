@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 project(lcd_i2c
-        VERSION 1.0.1)
+        VERSION 1.1.0)
 
 add_library(lcd_i2c STATIC
     src/lcd_i2c.c
