@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 Sebastian Muxel
+ * For license check LICENSE in project root.
+ */
 #pragma once
 #include <stddef.h>
 #include <stdint.h>

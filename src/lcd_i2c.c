@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 Sebastian Muxel
+ * For license check LICENSE in project root.
+ */
 #include "lcd_i2c.h"
 #include <stdint.h>
 
