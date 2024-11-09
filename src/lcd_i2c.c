@@ -109,7 +109,7 @@ static int lcd_clear_line(lcd_t* lcd, const uint8_t line)
     for (int i = 0; i < lcd->cols; ++i)
     {
         lcd_write(lcd, empty[i], 0);
-        lcd->i2c_funcs.delay_fn((void*)lcd->i2c_funcs.delay_fn, 1000);
+        lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 1000);
     }
     return 0;
 }
