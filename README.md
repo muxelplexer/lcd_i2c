@@ -20,6 +20,17 @@ struct lcd_i2c
 };
 ```
 
+### Usage with zephyr
+
+When using zephyr you will need to link the library with the `zephyr_interface`
+target. This makes sure that the same compilation and linking options are used.
+
+```cmake
+target_link_libraries(lcd_i2c
+    PUBLIC zephyr_interface
+)
+```
+
 ## Known Issues
 
 - Not compatible with non 2-line mode.
