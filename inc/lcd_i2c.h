@@ -61,7 +61,7 @@ typedef struct lcd
     uint8_t addr;
     uint8_t rows;
     uint8_t cols;
-    uint32_t write_delay;
+    uint32_t write_delay_us;
 } lcd_t;
 
 /**
