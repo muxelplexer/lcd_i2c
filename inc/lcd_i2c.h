@@ -44,7 +44,7 @@ struct lcd_i2c
     delay_us_i2c_fn* delay_fn;
 };
 
-typedef enum lcd_backlight : uint8_t
+typedef enum lcd_backlight
 {
     LCD_BL_OFF = 0x00,
     LCD_BL_ON = 0x08,
