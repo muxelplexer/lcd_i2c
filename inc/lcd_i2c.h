@@ -94,9 +94,15 @@ int lcd_print(struct lcd* lcd, const char* text, const size_t text_len, uint8_t 
  ** @brief prints an character on the screen.
  ** @param lcd - the structure to initialize
  ** @param ch - character to print
- ** @param line - LCD line to reset to. If 0xFF it will continue.
  **/
-int lcd_put_char(lcd_t* lcd, const char ch, uint8_t line);
+int lcd_put_char(lcd_t* lcd, const char ch);
+
+/**
+ ** @brief prints an character on the screen.
+ ** @param lcd - the structure to initialize
+ ** @param line_num - line to set to
+ **/
+int lcd_set_line(lcd_t* lcd, const uint8_t line_num);
 
 /**
  ** @brief refreshes the LCD screen and clears all content from it

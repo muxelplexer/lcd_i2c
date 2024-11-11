@@ -50,7 +50,6 @@
 
 static int lcd_write4b(lcd_t* lcd, uint8_t val);
 static int lcd_strobe(lcd_t* lcd, const uint8_t val);
-static int lcd_set_line(lcd_t* lcd, uint8_t line);
 static int lcd_clear_line(lcd_t* lcd, const uint8_t line);
 
 int lcd_init(lcd_t* lcd, const uint8_t addr, const uint8_t cols, const uint8_t rows)
@@ -106,7 +105,7 @@ int lcd_print(lcd_t* lcd, const char* text, const size_t text_len, uint8_t line)
             continue;
         }
 
-        lcd_write(lcd, (uint8_t)text[i], LCD_RS);
+        lcd_put_char(lcd, text[i]);
 
         if (text_pos == 20 - 1)
         {
@@ -128,10 +127,8 @@ int lcd_print(lcd_t* lcd, const char* text, const size_t text_len, uint8_t line)
     return 0;
 }
 
-int lcd_put_char(lcd_t* lcd, const char ch, uint8_t line)
+int lcd_put_char(lcd_t* lcd, const char ch)
 {
-    if (line != 0xFF)
-        lcd_set_line(lcd, line);
     int ret = lcd_write(lcd, (uint8_t)ch, LCD_RS);
     lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, lcd->write_delay_us);
     return ret;
@@ -151,7 +148,7 @@ int lcd_set_backlight(lcd_t* lcd, const lcd_bl_t bl_level)
     return 0;
 }
 
-static int lcd_set_line(lcd_t* lcd, uint8_t line)
+int lcd_set_line(lcd_t* lcd, uint8_t line)
 {
     switch(line)
     {
@@ -187,7 +184,7 @@ static int lcd_clear_line(lcd_t* lcd, const uint8_t line)
 
 static int lcd_write4b(lcd_t* lcd, uint8_t val)
 {
-    val = val | lcd->backlight;
+    val = val | (uint8_t)lcd->backlight;
     int ret = lcd->i2c_funcs.write_fn(lcd->i2c_funcs.device, lcd->addr, val);
     lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 100);
     lcd_strobe(lcd, val);
@@ -196,10 +193,10 @@ static int lcd_write4b(lcd_t* lcd, uint8_t val)
 
 static int lcd_strobe(lcd_t* lcd, const uint8_t val)
 {
-    uint8_t ena = val | LCD_EN | lcd->backlight;
+    uint8_t ena = val | LCD_EN | (uint8_t)lcd->backlight;
     int ret = lcd->i2c_funcs.write_fn(lcd->i2c_funcs.device, lcd->addr, ena);
 
-    uint8_t dis = (val & ~LCD_EN) | lcd->backlight;
+    uint8_t dis = (val & ~LCD_EN) | (uint8_t)lcd->backlight;
     ret = lcd->i2c_funcs.write_fn(lcd->i2c_funcs.device, lcd->addr, dis);
     return ret;
 }
