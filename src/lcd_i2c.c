@@ -55,7 +55,12 @@ static int lcd_clear_line(lcd_t* lcd, const uint8_t line);
 
 int lcd_init(lcd_t* lcd, const uint8_t addr, const uint8_t cols, const uint8_t rows)
 {
-    lcd->i2c_funcs.init_fn(lcd->i2c_funcs.device, addr);
+    int ret = lcd->i2c_funcs.init_fn(lcd->i2c_funcs.device, addr);
+    if (ret > 0)
+    {
+        return -1;
+    }
+
     lcd->addr = addr;
     lcd->cols = cols;
     lcd->rows = rows;
