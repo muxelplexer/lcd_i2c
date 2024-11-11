@@ -141,6 +141,7 @@ int lcd_clear(lcd_t* lcd)
 {
     lcd_write(lcd, LCD_CMD_CLS, 0);
     lcd_write(lcd, LCD_CMD_RET, 0);
+    lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 200);
     return 0;
 }
 
