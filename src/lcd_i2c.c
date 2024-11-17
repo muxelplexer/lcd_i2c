@@ -54,11 +54,8 @@ static int lcd_clear_line(lcd_t* lcd, const uint8_t line);
 
 int lcd_init(lcd_t* lcd, const uint8_t addr, const uint8_t cols, const uint8_t rows)
 {
-    int ret = lcd->i2c_funcs.init_fn(lcd->i2c_funcs.device, addr);
-    if (ret > 0)
-    {
+    if(lcd->i2c_funcs.init_fn(lcd->i2c_funcs.device, addr) < 0)
         return -1;
-    }
 
     lcd->addr = addr;
     lcd->cols = cols;
@@ -66,10 +63,17 @@ int lcd_init(lcd_t* lcd, const uint8_t addr, const uint8_t cols, const uint8_t r
     lcd->backlight = LCD_BL_ON;
     lcd->write_delay_us = 75000;
 
+    delay_us_i2c_fn* delay = lcd->i2c_funcs.delay_fn;
+
+    delay(lcd->i2c_funcs.device, 15000);
     lcd_write(lcd, 0x3, 0x0);
+    delay(lcd->i2c_funcs.device, 5000);
     lcd_write(lcd, 0x3, 0x0);
+    delay(lcd->i2c_funcs.device, 110);
     lcd_write(lcd, 0x3, 0x0);
+    delay(lcd->i2c_funcs.device, 1);
     lcd_write(lcd, 0x2, 0x0);
+    delay(lcd->i2c_funcs.device, 1);
 
     lcd_write(lcd, LCD_CMD_FSET | LCD_FSET_2LINE | LCD_FSET_5x8DOTS | LCD_FSET_4BITMODE, 0x0);
     lcd_write(lcd, LCD_CMD_DCTRL | LCD_DCTRL_ON | LCD_DCTRL_BON, 0x0);
@@ -84,6 +88,14 @@ int lcd_write(lcd_t* lcd, uint8_t val, const uint8_t mode)
 {
     lcd_write4b(lcd, mode | (val & 0xF0));
     lcd_write4b(lcd, mode | ((val << 4) & 0xF0));
+    return 0;
+}
+
+int lcd_write_d(lcd_t* lcd, const uint8_t val, const uint8_t mode, const uint32_t delay_us)
+{
+    lcd_write4b(lcd, mode | (val & 0xF0));
+    lcd_write4b(lcd, mode | ((val << 4) & 0xF0));
+    lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, delay_us);
     return 0;
 }
 
@@ -186,7 +198,6 @@ static int lcd_write4b(lcd_t* lcd, uint8_t val)
 {
     val = val | (uint8_t)lcd->backlight;
     int ret = lcd->i2c_funcs.write_fn(lcd->i2c_funcs.device, lcd->addr, val);
-    lcd->i2c_funcs.delay_fn(lcd->i2c_funcs.device, 100);
     lcd_strobe(lcd, val);
     return ret;
 }

@@ -82,6 +82,15 @@ int lcd_init(lcd_t* lcd, const uint8_t addr, const uint8_t cols, const uint8_t r
 int lcd_write(lcd_t* lcd, const uint8_t val, const uint8_t mode);
 
 /**
+ ** @brief writes a byte to the LCD's parallel bus in 4-bit mode.
+ ** @param lcd - the structure to initialize
+ ** @param val - value to write
+ ** @param mode - write mode to use
+ ** @param delay_us - µs delay after write operation
+ **/
+int lcd_write_d(lcd_t* lcd, const uint8_t val, const uint8_t mode, const uint32_t delay_us);
+
+/**
  ** @brief prints a string to the LCD-screen. Line-Wrap is enabled on per-character basis.
  ** @param lcd - the structure to initialize
  ** @param text - pointer to string in memory
