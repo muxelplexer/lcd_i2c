@@ -20,5 +20,5 @@ target_compile_options(lcd_i2c PRIVATE
 set_property(TARGET lcd_i2c PROPERTY C_STANDARD 23)
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/inc/version.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/inc/lcd_i2c/version.h"
 )

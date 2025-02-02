@@ -5,7 +5,6 @@
 #pragma once
 #include <stddef.h>
 #include <stdint.h>
-#include "version.h"
 
 /**
  ** @brief board specific function used to initialize the i2c device.
